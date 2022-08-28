@@ -43,7 +43,7 @@ const Index = () => {
           item
           xs={false}
           sm={4}
-          md={7}
+          md={6}
           sx={{
             backgroundImage: 'url(https://images.pexels.com/photos/1727684/pexels-photo-1727684.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
             backgroundRepeat: 'no-repeat',
@@ -53,7 +53,7 @@ const Index = () => {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -94,30 +94,29 @@ const Index = () => {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+
+              <Grid container>
+                <Grid item xs>
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Recordar inicio de sesión"
+                  />
+                </Grid>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Olvido la contraseña?
+                  </Link>
+                </Grid>
+              </Grid>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Iniciar
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+
             </Box>
           </Box>
         </Grid>
