@@ -1,125 +1,121 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import {useForm} from "../../../hooks/useForm";
-import {useDispatch} from "react-redux";
-import {startLogin} from "../../../redux/auth.slice";
+import Login from "./Login";
+import Register from "./Register";
+import {Tab, Tabs} from "@mui/material";
+import {BootstrapButton} from "../../ui/ButtonCustom";
 
 
 const theme = createTheme();
 
-const Index = () => {
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-  const dispatch = useDispatch();
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <>{children}</>
+        </Box>
+      )}
+    </div>
+  );
+}
 
-  const [ formLoginValues, handleLoginInputChange ] = useForm( {
-    lEmail: 'efrain@gmail.com',
-    lPassword: '123456'
-  } );
-  const { lEmail, lPassword } = formLoginValues;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(startLogin(lEmail, lPassword));
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
+}
+
+
+const Index = () => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
-          item
-          xs={false}
-          sm={4}
-          md={6}
-          sx={{
-            backgroundImage: 'url(https://images.pexels.com/photos/1727684/pexels-photo-1727684.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
+          item xs={false} sm={6} md={7}
+          display='flex' justifyContent='center' alignItems='center'
+        >
+          <Paper
+            square
+            elevation={6}
+            sx={{
+              borderRadius:'29px',
+              width:'95%',
+              height:'95vh',
+              backgroundImage: 'url(https://images.pexels.com/photos/1727684/pexels-photo-1727684.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={5} display='flex' justifyContent='center'>
           <Box
             sx={{
+              width:'70%',
               my: 8,
               mx: 4,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              justifyContent:'center'
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
+            <Box sx={{
+              width:'100%',
+              display:'flex',
+              justifyContent:'end',
+              paddingBottom:'50px'
+            }}>
+              <Typography variant="h5">
+                <strong>BAUMARKT</strong>
+              </Typography>
+            </Box>
+            <Typography variant="h5">
               Bienvenidos a todos...
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Correo"
-                name="lEmail"
-                value={lEmail}
-                onChange={handleLoginInputChange}
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="lPassword"
-                value={lPassword}
-                onChange={handleLoginInputChange}
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
 
-              <Grid container>
-                <Grid item xs>
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Recordar inicio de sesión"
-                  />
-                </Grid>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Olvido la contraseña?
-                  </Link>
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Iniciar
-              </Button>
-
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tab label="Login" {...a11yProps(0)} />
+                <Tab label="Registro" {...a11yProps(1)} />
+              </Tabs>
             </Box>
+
+            <TabPanel value={value} index={0}>
+              <Login/>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Register/>
+            </TabPanel>
+
           </Box>
         </Grid>
+
       </Grid>
 
     </ThemeProvider>

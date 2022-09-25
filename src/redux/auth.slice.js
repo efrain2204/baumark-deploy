@@ -1,8 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {fetchSinToken} from "../utils/fetch";
+import {fetchConToken, fetchSinToken} from "../utils/fetch";
 import { toast } from 'react-toastify';
 
-const initialState = {};
+const initialState = {
+  user: {},
+  loading: false,
+  error: null,
+};
 
 const authSlice = createSlice({
   name:'auth',
@@ -10,13 +14,11 @@ const authSlice = createSlice({
   reducers:{
     login(state, action){
       return {
-        uid:action.payload.uid,
-        name: action.payload.name,
-        token: action.payload.token
+        user: action.payload.user
       }
     },
     logout(state,action){
-      return {}
+      return initialState
     }
   }
 })
@@ -26,17 +28,22 @@ export const startLogin = (email, password) =>{
   return async (dispatch) =>{
     let resp,body;
     try {
-      resp = await fetchSinToken('auth', {email, password},'POST');
+      resp = await fetchSinToken('users/loginAdmin', {email, password},'POST');
       body = await resp.json();
-      if(body.ok){
+      console.log(body)
+
+      if(resp.ok){
         localStorage.setItem('token',body.token);
         localStorage.setItem('token-init-date', new Date().getTime());
-        dispatch( login({
-          uid: body.uid,
-          name: body.name,
-          token: body.token
-        }));
-
+        // dispatch( login({
+        //   user:{
+        //     uid: body.result.id,
+        //     name: body.result.username,
+        //   }
+        // }));
+        toast.success('Usuario logueado', {
+          position: "top-center",
+        });
       }else{
         toast.error('Algo salio mal', {
           position: "top-center",
@@ -49,6 +56,56 @@ export const startLogin = (email, password) =>{
     }
   }
 }
+
+export const startRegister = (email,names, surnames, password) => {
+  return async (dispatch) =>{
+    const resp = await fetchSinToken('users/insertAdmin', {email,names,surnames, password},'POST');
+    const body = await resp.json();
+
+    if(resp.ok){
+      localStorage.setItem('token',body.token);
+      localStorage.setItem('token-init-date', new Date().getTime());
+      dispatch( login({
+        user:{
+          uid: body.result.id,
+          name: body.result.username,
+        }
+      }));
+      toast.success('Usuario creado', {
+        position: "top-center",
+      });
+    }else{
+      toast.error('Error al registrar usuario', {
+        position: "top-center",
+      });
+    }
+  }
+}
+
+
+export const startChecking = () => {
+  return async (dispatch) =>{
+    if (localStorage.getItem('token')){
+      const resp = await fetchConToken('users/verifyToken');
+      const body = await resp.json();
+
+      if(resp.ok){
+        // localStorage.setItem('token',body.token);
+        // localStorage.setItem('token-init-date', new Date().getTime());
+        dispatch( login({
+          user:{
+            uid: body.result.id,
+            name: body.result.name
+          }
+        }));
+      }else{
+        console.log("BBBBBBBBBBBBB")
+        // dispatch(checkingFinish());
+      }
+    }
+  }
+}
+
 
 export const {login,logout} = authSlice.actions;
 

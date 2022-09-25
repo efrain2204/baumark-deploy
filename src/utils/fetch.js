@@ -1,4 +1,4 @@
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:4200';
 
 const fetchSinToken = (endPoint, data, method = 'GET') =>{
   const url = `${baseURL}/${endPoint}`;
@@ -22,7 +22,7 @@ const fetchConToken = (endPoint, data, method = 'GET') =>{
     return fetch(url,{
       method,
       headers:{
-        'x-token':token
+        'Authorization': 'Bearer ' + token
       }
     });
   }else {
@@ -30,7 +30,7 @@ const fetchConToken = (endPoint, data, method = 'GET') =>{
       method,
       headers:{
         'Content-type':'application/json',
-        'x-token':token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify(data)
     });
