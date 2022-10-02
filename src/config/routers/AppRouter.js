@@ -24,7 +24,7 @@ const AppRouter = () => {
   // }, [dispatch]);
 
   return (
-    <Router>
+    <Router basename='/baumark-deploy'>
       <Routes>
         <Route
           path="/"
