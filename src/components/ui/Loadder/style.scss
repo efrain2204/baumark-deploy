@@ -1,0 +1,41 @@
+// Sólo modificar estas variables…
+$bg: darken(dimgray, 30%);
+$color-loading: lime;
+$size-loading: 25vw;
+$vel: 2s;
+
+// No modificar
+$width-loading: $size-loading * 0.1;
+
+@keyframes rotar {
+  100% {
+    transform: rotate(-180deg);
+  }
+}
+
+.body-loader {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $bg;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $size-loading;
+  height: $size-loading;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: {
+    style: solid;
+    width: $width-loading;
+    color: $color-loading transparent $color-loading transparent;
+  }
+
+  animation: rotar $vel linear infinite;
+}

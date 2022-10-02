@@ -13,23 +13,27 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "../../../../hooks/useForm";
 import { BootstrapButton } from "../../../ui/ButtonCustom";
-import { INCREMENT_COUNTER } from "../../../../Graphql/queries";
+import { LOGIN } from "../../../../Graphql/queries";
 
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const [mutateFunction, { data, loading, error }] =
-    useMutation(INCREMENT_COUNTER);
-  // const dispatch = useDispatch();
+  const [loginFunction, { data, loading, error }] = useMutation(LOGIN);
+
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
+  const { isVerified } = useSelector((state) => state.auth);
 
   const [formLoginValues, handleLoginInputChange] = useForm({
     lEmail: "efrain@gmail.com",
     lPassword: "123456",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const { lEmail, lPassword } = formLoginValues;
 
@@ -37,22 +41,24 @@ const Index = () => {
     e.preventDefault();
 
     // dispatch(startLogin(lEmail, lPassword));
-    mutateFunction({ variables: { email: lEmail, pwd: lPassword } })
+    // navigate('/dashboard', { replace: true });
+    loginFunction({ variables: { email: lEmail, pwd: lPassword } })
       .then((res) => {
         localStorage.setItem("user_logged", true);
         localStorage.setItem("token", res.data.login.access_token);
         localStorage.setItem("token-init-date", new Date().getTime());
 
+        // TODO: Service to consult if user is verified
         toast.success("Usuario correcto!", {
           position: "top-center",
         });
+        navigate("/dashboard", { replace: true });
       })
       .catch((e) => {
         toast.error(e.message, {
           position: "top-center",
         });
       });
-
   };
 
   if (loading) return "Proccesando...";

@@ -20,7 +20,7 @@ const AppRouter = () => {
   // const { user } = useSelector((state) => state.auth);
 
   // useEffect(() => {
-  //   dispatch(startChecking());
+    // dispatch(startChecking());
   // }, [dispatch]);
 
   return (
